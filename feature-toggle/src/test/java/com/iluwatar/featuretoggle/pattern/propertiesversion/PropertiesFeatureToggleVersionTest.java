@@ -25,30 +25,38 @@ package com.iluwatar.featuretoggle.pattern.propertiesversion;
 
 import com.iluwatar.featuretoggle.pattern.Service;
 import com.iluwatar.featuretoggle.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Test Properties Toggle
+ */
 public class PropertiesFeatureToggleVersionTest {
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testNullPropertiesPassed() throws Exception {
-    new PropertiesFeatureToggleVersion(null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testNonBooleanProperty() throws Exception {
-    final Properties properties = new Properties();
-    properties.setProperty("enhancedWelcome", "Something");
-    new PropertiesFeatureToggleVersion(properties);
+  @Test
+  public void testNullPropertiesPassed() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      new PropertiesFeatureToggleVersion(null);
+    });
   }
 
   @Test
-  public void testFeatureTurnedOn() throws Exception {
+  public void testNonBooleanProperty() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      final Properties properties = new Properties();
+      properties.setProperty("enhancedWelcome", "Something");
+      new PropertiesFeatureToggleVersion(properties);
+    });
+  }
+
+  @Test
+  public void testFeatureTurnedOn() {
     final Properties properties = new Properties();
     properties.put("enhancedWelcome", true);
     Service service = new PropertiesFeatureToggleVersion(properties);
@@ -58,7 +66,7 @@ public class PropertiesFeatureToggleVersionTest {
   }
 
   @Test
-  public void testFeatureTurnedOff() throws Exception {
+  public void testFeatureTurnedOff() {
     final Properties properties = new Properties();
     properties.put("enhancedWelcome", false);
     Service service = new PropertiesFeatureToggleVersion(properties);
